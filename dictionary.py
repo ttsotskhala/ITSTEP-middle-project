@@ -18,56 +18,6 @@ LANG_PAIRS = {
 def pause():
     input("\nდასაბრუნებლად დააჭირეთ Enter...")
 
-# -------------------- KEYBOARD FIX -------------------
-
-EN = "qwertyuiop[]asdfghjkl;'zxcvbnm,.WRTSJZC"
-RU = "йцукенгшщзхъфывапролджэячсмитьбюЦКЕЫОЯС"
-KA = "ქწერტყუიოპ[]ასდფგჰჯკლ;'ზხცვბნმ,.ჭღთშჟძჩ"
-
-# mappings
-EN_RU = dict(zip(EN, RU))
-RU_EN = dict(zip(RU, EN))
-
-EN_KA = dict(zip(EN, KA))
-KA_EN = dict(zip(KA, EN))
-
-RU_KA = dict(zip(RU, KA))
-KA_RU = dict(zip(KA, RU))
-
-def keyboard_fix(word, dictionary, pair_key):
-    """აბრუნებს შეყვანილი სიტყვის ჩასწორებულ ვარიანტს EN/RU/KA კლავიატურის მიხედვით."""
-
-    def convert(w, mapping):
-        return "".join(mapping.get(ch, ch) for ch in w)
-
-    candidates = set()
-
-    # თავდაპირველი მნიშვნელობა
-    candidates.add(word)
-
-    # ყველა შესაძლო კონვერტაცია
-    candidates.add(convert(word, EN_RU))
-    candidates.add(convert(word, RU_EN))
-    candidates.add(convert(word, EN_KA))
-    candidates.add(convert(word, KA_EN))
-    candidates.add(convert(word, RU_KA))
-    candidates.add(convert(word, KA_RU))
-
-    # თუ რომელიმე ვარიანტი არსებობს ლექსიკონში - აბრუნებს, როგორც სწორ ვარიანტს
-    for c in candidates:
-        if c in dictionary.get(pair_key, {}):
-            return c
-
-    # თუ თარგმანის საპირისპირო მხარეს არსებობს
-    from_lang, to_lang = pair_key.split("-")
-    reverse_key = f"{to_lang}-{from_lang}"
-
-    for c in candidates:
-        if reverse_key in dictionary and c in dictionary[reverse_key]:
-            return c
-
-    # თუ ვერაფერი მოიძებნა — დააბრუნებს ყველაზე მინიმალური სიგრძიშ დასამთხვევი ვარიანტი
-    return min(candidates, key=len)
 
 # ----------------------- JSON -----------------------
 def create_default_dictionary():
@@ -137,13 +87,7 @@ def translate():
     print(f"არჩეული მიმართულება: {label}")
     print("შეიყვანე სიტყვა (0 - გამოსვლა)\n")
 
-    word = input("სიტყვა: ").strip()
-    fixed_word = keyboard_fix(word, dictionary, pair_key)
-
-    if fixed_word != word:
-       print(f"შესწორებული სიტყვა: {fixed_word}")
-       word = fixed_word
-
+    word = input("სიტყვა: ").strip().lower()
 
     if word == "0":
         return
