@@ -87,7 +87,6 @@ class BookManager:
                     item["author"],
                     item["year"],
                     item.get("id")
-
                 ))
 
             print("ფაილიდან ჩატვირთვა წარმატებულია.")
@@ -317,3 +316,4 @@ def run():
             print("არასწორი არჩევანი.")
 
 run()
+
