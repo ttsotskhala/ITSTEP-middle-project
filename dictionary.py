@@ -1,6 +1,5 @@
 import json
 import os
-import platform
 
 # JSON ლექსიკონის ფაილი
 DICTIONARY_FILE = "dictionary.json"
@@ -142,3 +141,4 @@ def main():
             pause()
 
 main()
+
